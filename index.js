@@ -31,11 +31,20 @@ class Cart extends helper {
         this.kuantitas = kuantitas;
     }
 
+    /**
+     * @param {string} kodeProduk 
+     * @param {number} kuantitas 
+    */
+
     tambahProduk(kodeProduk, kuantitas) {
         const dataCart = this.state('shoppingCart') || {}
         this.checkAvailableProduct(kodeProduk, kuantitas, dataCart)
         this.setState('shoppingCart', dataCart)
     }
+
+    /**
+     * @param {string} kodeProduk
+    */
 
     hapusProduk(kodeProduk) {
         const dataCart = this.state('shoppingCart') || {}

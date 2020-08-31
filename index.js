@@ -89,3 +89,4 @@ keranjang.hapusProduk()
 keranjang.hapusProduk("Semangka Kuning");
 keranjang.hapusProduk("Semangka Merah");
 keranjang.tampilkanCart();
+window.localStorage.clear();

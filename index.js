@@ -1,11 +1,25 @@
 class helper {
+    /**
+     * @param {string} key 
+     * @param {*} value 
+    */
     setState(key, value) {
         localStorage.setItem(key, JSON.stringify(value))
     }
 
+    /**
+     * @param {string} key 
+    */
+
     state(key) {
         return JSON.parse(localStorage.getItem(key))
     }
+
+    /**
+     * @param {String} kodeProduk 
+     * @param {number} kuantitas 
+     * @param {Object} dataCart 
+    */
 
     checkAvailableProduct(...args) {
         const [kodeProduk, kuantitas, dataCart] = args
@@ -15,6 +29,11 @@ class helper {
             dataCart[kodeProduk] = kuantitas
         }
     }
+
+    /**
+     * @param {string[]} objToArrdataCart 
+     * @param {Object} dataCart  
+    */
 
     listsCart(...args) {
         const [objToArrdataCart, dataCart] = args
@@ -31,11 +50,20 @@ class Cart extends helper {
         this.kuantitas = kuantitas;
     }
 
+    /**
+     * @param {string} kodeProduk 
+     * @param {number} kuantitas 
+    */
+
     tambahProduk(kodeProduk, kuantitas) {
         const dataCart = this.state('shoppingCart') || {}
         this.checkAvailableProduct(kodeProduk, kuantitas, dataCart)
         this.setState('shoppingCart', dataCart)
     }
+
+    /**
+     * @param {string} kodeProduk
+    */
 
     hapusProduk(kodeProduk) {
         const dataCart = this.state('shoppingCart') || {}

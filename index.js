@@ -1,31 +1,52 @@
+class helper {
+    setState(key, value) {
+        localStorage.setItem(key, JSON.stringify(value))
+    }
+
+    state(key) {
+        return JSON.parse(localStorage.getItem(key))
+    }
+
+    checkAvailableProduct(...args) {
+        const [kodeProduk, kuantitas, dataCart] = args
+        if (kodeProduk in dataCart) {
+            dataCart[kodeProduk] += kuantitas
+        } else {
+            dataCart[kodeProduk] = kuantitas
+        }
+    }
+
+    listsCart(...args) {
+        const [objToArrdataCart, dataCart] = args
+        const res = objToArrdataCart.map((v, i) => `${v} (${dataCart[v]}) <br/>`).join('')
+        document.getElementById("header").innerHTML = res;
+
+    }
+}
+
 class Cart extends helper {
     constructor(kodeProduk, kuantitas) {
+        super()
         this.kodeProduk = kodeProduk;
         this.kuantitas = kuantitas;
     }
 
     tambahProduk(kodeProduk, kuantitas) {
-        const tableCart = JSON.parse(localStorage.getItem('shoppingCart')) || {}
-
-        if (kodeProduk in tableCart) {
-            tableCart[kodeProduk] += kuantitas
-        } else {
-            tableCart[kodeProduk] = kuantitas
-        }
-
-        localStorage.setItem('shoppingCart', JSON.stringify(tableCart))
+        const dataCart = this.state('shoppingCart') || {}
+        this.checkAvailableProduct(kodeProduk, kuantitas, dataCart)
+        this.setState('shoppingCart', dataCart)
     }
 
     hapusProduk(kodeProduk) {
-        const tableCart = JSON.parse(localStorage.getItem('shoppingCart')) || {}
-        delete tableCart[kodeProduk];
-        localStorage.setItem('shoppingCart', JSON.stringify(tableCart))
+        const dataCart = this.state('shoppingCart') || {}
+        delete dataCart[kodeProduk];
+        this.setState('shoppingCart', dataCart)
     }
 
     tampilkanCart() {
-        const tableCart = JSON.parse(localStorage.getItem('shoppingCart')) || {}
-        const res = Object.keys(tableCart).map((v, i) => `${v} (${tableCart[v]})`)
-        return res
+        const dataCart = this.state('shoppingCart') || {}
+        const objToArrdataCart = Object.keys(dataCart)
+        this.listsCart(objToArrdataCart, dataCart)
     }
 }
 
@@ -36,10 +57,7 @@ keranjang.tambahProduk("Semangka Kuning", 3);
 keranjang.tambahProduk("Apel Merah", 1);
 keranjang.tambahProduk("Apel Merah", 4);
 keranjang.tambahProduk("Apel Merah", 2);
-
+keranjang.hapusProduk()
 keranjang.hapusProduk("Semangka Kuning");
 keranjang.hapusProduk("Semangka Merah");
-
-
-const result = keranjang.tampilkanCart();
-console.log(result)
+keranjang.tampilkanCart();

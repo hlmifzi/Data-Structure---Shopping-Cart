@@ -1,32 +1,16 @@
 class helper {
-    /**
-     * @param {string} key 
-     * @param {*} value 
-    */
-    setState(key, value) {
-        localStorage.setItem(key, JSON.stringify(value))
-    }
-
-    /**
-     * @param {string} key 
-    */
-
-    state(key) {
-        return JSON.parse(localStorage.getItem(key))
-    }
 
     /**
      * @param {String} kodeProduk 
      * @param {number} kuantitas 
      * @param {Object} dataCart 
     */
-
     checkAvailableProduct(...args) {
         const [kodeProduk, kuantitas, dataCart] = args
         if (kodeProduk in dataCart) {
-            dataCart[kodeProduk] += kuantitas
+            this.dataCart[kodeProduk] += kuantitas
         } else {
-            dataCart[kodeProduk] = kuantitas
+            this.dataCart[kodeProduk] = kuantitas
         }
     }
 
@@ -43,11 +27,11 @@ class helper {
     }
 }
 
+
 class Cart extends helper {
-    constructor(kodeProduk, kuantitas) {
+    constructor(dataCart = {}) {
         super()
-        this.kodeProduk = kodeProduk;
-        this.kuantitas = kuantitas;
+        this.dataCart = dataCart;
     }
 
     /**
@@ -56,9 +40,7 @@ class Cart extends helper {
     */
 
     tambahProduk(kodeProduk, kuantitas) {
-        const dataCart = this.state('shoppingCart') || {}
-        this.checkAvailableProduct(kodeProduk, kuantitas, dataCart)
-        this.setState('shoppingCart', dataCart)
+        this.checkAvailableProduct(kodeProduk, kuantitas, this.dataCart)
     }
 
     /**
@@ -66,15 +48,13 @@ class Cart extends helper {
     */
 
     hapusProduk(kodeProduk) {
-        const dataCart = this.state('shoppingCart') || {}
-        delete dataCart[kodeProduk];
-        this.setState('shoppingCart', dataCart)
+        delete this.dataCart[kodeProduk];
     }
 
     tampilkanCart() {
-        const dataCart = this.state('shoppingCart') || {}
-        const objToArrdataCart = Object.keys(dataCart)
-        this.listsCart(objToArrdataCart, dataCart)
+        const objToArrdataCart = Object.keys(this.dataCart)
+        this.listsCart(objToArrdataCart, this.dataCart)
+        console.log(this.dataCart)
     }
 }
 
@@ -89,4 +69,3 @@ keranjang.tambahProduk("Apel Merah", 2);
 keranjang.hapusProduk("Semangka Kuning");
 keranjang.hapusProduk("Semangka Merah");
 keranjang.tampilkanCart();
-window.localStorage.clear();
